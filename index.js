@@ -97,7 +97,7 @@ function initFunction() {
               const listResult = await listResponse.json();
               console.log(listResult);  */
 
-              const deleteResponse = await fetch(pollingEndpoint, { method: 'DELETE', headers: headers1 })
+              const deleteResponse = await fetch(pollingEndpoint, { method: 'DELETE', headers: headers })
               console.log(await deleteResponse.json())
 
           } catch (error) {

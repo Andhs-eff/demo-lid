@@ -1,34 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
-  <html>
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale0" />
-      <title>Voice recorder</title>
-	  <script defer src="index.js"></script>
-	  <style>
-		  * {
-			margin: 0p;
-			padding: 0;
-			box-sizing: border-box;
-		  }
-		  body {
-			font-family: Arial, Helvetica, sans-serif;
-			text-align: center;
-		  }
-		  button {
-			padding: 7px 20px;
-			cursor: pointer;
-		  }
-	  </style>
-    </head>
-    <body>
-      <button id="startRecording">Start</button>
+<html>
+  <head>
+    <title>Language Identification POC</title>
+    <script type="text/javascript" src="./keyboard/keyboard.js" charset="UTF-8"></script>
+    <link rel="stylesheet" type="text/css" href="./keyboard/keyboard.css">
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(./assets/CI_Background.png);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+      }
+
+      body * {
+        font-family: 'Mulish', sans-serif;
+        text-align: center;
+      }
+
+      #content {
+        width: 1312px;
+        position: relative;
+        margin: 0 auto;
+      }
+
+      button {
+        border-radius: 5px;
+        border: none;
+        font-size: 16px;
+        background-color: #7459fe;
+        color: #fff;
+      }
+
+      #container {
+        display: flex;
+        flex-direction: row;  
+        justify-content: center;
+      }
+
+      #native-reply,
+      #english-reply {
+        width: 400px;
+        margin: auto;
+        font-size: 30px;
+        font-weight: bold;
+      }
+
+      #video-wrapper {
+        height: 542px;
+        background-position: top;
+      }
+
+      #video-wrapper div {
+        width: 512px;
+        margin: auto;
+        padding: 30px 0 0 0;
+      }
+      video {
+        display: block;
+        border-radius: 50%;
+      }
+	  
+	  #inter {
+	    margin-top: 10px;
+      font-size: 30px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;  
+      align-items: center;
+	  }
+	  
+	  #intext {
+		font-size: 30px;
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    text-align: left !important;
+	  }
+	
+    #whisper {
+      background-color: transparent; 
+    }
+
+    .anima {
+  animation-duration: 1s;
+  animation-name: pulse;
+  animation-iteration-count: infinite;
+  }
+
+    @keyframes pulse {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(0.5, 0.5, 0.5);
+  }
+
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
+    
+    </style>
+  </head>
+
+  <body>
+    <div id="content">
+      <div id="container">
+        <div id="native-reply"></div>
+        <div id="video-wrapper">
+          <div id="for-reply">
+            <video id="talk-video" width="512" height="512" autoplay playsinline></video>
+          </div>
+        </div>
+        <div id="english-reply"></div>
+      </div>
       <br />
-      <p id="isRecording">Click start button to record</p>
-      <audio src="" id="audioElement" controls></audio>
-	  <p id="asr" style="color: red; font-size: 25px;"></p>
-    </body>
-  </html>
+
+      <div id="inter">
+            <button type="button" id="whisper" style="cursor: pointer;">
+              <img alt="Start" class="anima" id="start_img" src="./assets/mic.gif" width="100" height="100" style="border-radius: 50%;">
+          </button>
+              <textarea class="keyboardInput" id="intext" name="intext" rows="3" cols="40"></textarea>
+      </div>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+  </body>
 </html>

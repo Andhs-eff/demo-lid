@@ -12,6 +12,8 @@ const nativeReply = document.getElementById("native-reply");
 const englishReply = document.getElementById("english-reply");
 const micImage = document.getElementById("start_img")
 
+langDetector.returnScores = true
+
 let blob;
 
 let iter = 0;

@@ -1,6 +1,6 @@
 console.warn = () => {};
 import { LangCode } from "./lcodes/LangCode.js";
-import {franc} from 'https://esm.sh/franc@6?bundle'
+import {francAll} from 'https://esm.sh/franc@6?bundle'
 import {langDetector} from './eld/languageDetector.js'; 
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
 let classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
@@ -33,6 +33,8 @@ let targetCode;
 let displayText;
 
 const video_codes = ["en", "ru", "es", "fr"];
+
+let triedLang = [];
 
 function setVideoElement(stream) {
   talkVideo.src = stream;
@@ -166,17 +168,22 @@ async function langDetectAudio(blob){
       case 2:
           [recLang, recText]  = await sendTranscribe1(blob);
           fullLang = languageName.of(recLang);
+          // No language options so mark incorrect language as not recognized
+          if (triedLang.includes(fullLang)) {
+            fullLang = null;
+          }
           break;
       case 0:
           [recLang, recText]  = await sendTranscribe2(blob);
           fullLang = languageName.of(recLang);
+          triedLang.push(fullLang);
           break;
       case 1:
           recLang  = await sendTranscribe3(blob);
           fullLang = languageName.of(recLang);
+          triedLang.push(fullLang);
           recText = ""; 
           break;           
-
   }    
                 
     replyProcessing(fullLang, recText);
@@ -188,19 +195,22 @@ async function langDetectText(sourceText) {
       case 0:
           [recLang, recText]  = await googleTranslate("auto", "en", sourceText);
           fullLang = languageName.of(recLang);
+          triedLang.push(fullLang);
           break;
       case 1:
-          recLang  = franc(sourceText, {minLength: 6});
+          let selected_franc = francAll(sourceText, {minLength: 6}).slice(0,2);
+          recLang  = selected_franc.filter(element => !triedLang.includes(languageName.of(element[0])))[0][0];
           fullLang = languageName.of(recLang);
+          triedLang.push(fullLang);
           break;
       case 2:
-          recLang  = langDetector.detect(sourceText)['language'];
+          let selected_eld = Object.entries(langDetector.detect(sourceText)['scores']);
+          recLang  = selected_eld.filter(element => !triedLang.includes(languageName.of(element[0])))[0][0];
           fullLang = languageName.of(recLang);
           break;           
   }    
                 
     replyProcessing(fullLang, sourceText);
-
     }
 
 async function replyProcessing(recognizedLang, userText) {
@@ -369,7 +379,9 @@ async function sendTranscribe3(blob) {
     
         let url = URL.createObjectURL(blob);
         let result = await classifier_mms(url);
-        return result[0].label;
+        // Excluding previous incorrect languages
+        let label = result.filter(element => !triedLang.includes(languageName.of(element.label)))[0].label;
+        return label;
 
     } catch (error) {
         console.error(error);

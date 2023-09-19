@@ -38,6 +38,13 @@ const video_codes = ["en", "ru", "es", "fr"];
 
 let triedLang = [];
 
+const tags = {
+  1: "span style='color: red;'",
+  2: "/span",
+  3: "br/",
+  4: "span style='color: blue;'"
+};
+
 function setVideoElement(stream) {
   talkVideo.src = stream;
   talkVideo.loop = false;
@@ -258,13 +265,13 @@ async function replyProcessing(recognizedLang, userText) {
 
   } else {
     if (userText != "") {
-      displayText = `You seem to be speaking <span style='color: red;'>${recognizedLang}</span><br/>Is it correct?<br/><br/>Your text:`;
+      displayText = `You seem to be speaking <3><1>${recognizedLang} <2><3>Is it correct?<3><3>Your text:`;
     } else {
-      displayText = `You seem to be speaking <span style='color: red;'>${recognizedLang}</span><br/>Is it correct?`;
+      displayText = `You seem to be speaking <3><1>${recognizedLang} <2><3>Is it correct?`;
     }
     const [, nativeText] = await googleTranslate("en", targetCode, displayText);
-    nativeReply.innerHTML = `${nativeText} <span style='color: seagreen;'>${userText}</span>`
-    englishReply.innerHTML = `${displayText} <span style='color: seagreen;'>${userText}</span>`
+    nativeReply.innerHTML = `${nativeText} <span style='color: springgreen;'>${userText}</span>`.replace(/[123]/g, m => tags[m]);
+    englishReply.innerHTML = `${displayText} <span style='color: seagreen;'>${userText}</span>`.replace(/[123]/g, m => tags[m]);
     if (video_codes.includes(targetCode)) {
       const stream = "./speech/" + targetCode + "_g.mp4";
       setVideoElement(stream);
@@ -293,10 +300,10 @@ async function replyProcessing(recognizedLang, userText) {
   };
 
   okButton.onclick = async () => {
-    const successText = "<span style='color: blue;'>Great!</span><br/>I'm connecting you to the interpreter speaking your language.<br/>Please wait.";
+    const successText = "<4>Great! <2><3>I'm connecting you to the interpreter speaking your language.<3>Please wait.";
     const [, finalText] = await googleTranslate("en", targetCode, successText);
-    nativeReply.innerHTML = finalText;
-    englishReply.innerHTML = successText;
+    nativeReply.innerHTML = finalText.replace(/[423]/g, m => tags[m]);
+    englishReply.innerHTML = successText.replace(/[423]/g, m => tags[m]);
     if (video_codes.includes(targetCode)) {
       const stream = "./speech/" + targetCode + "_s.mp4";
       setVideoElement(stream);

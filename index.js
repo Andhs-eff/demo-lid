@@ -6,11 +6,13 @@ import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.
 let classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
 let classifier_mms = await pipeline('audio-classification', 'Xenova/mms-lid-126');
 
+const myAvatar = localStorage.getItem('myAvatar');
+
 const content = document.getElementById("content");
 const talkVideo = document.getElementById('talk-video');
 const nativeReply = document.getElementById("native-reply");
 const englishReply = document.getElementById("english-reply");
-const micImage = document.getElementById("start_img")
+const micImage = document.getElementById("start_img");
 
 langDetector.returnScores = true
 
@@ -45,6 +47,11 @@ const tags = {
   4: "span style='color: blue;'"
 };
 
+// hotfix for video height
+if (myAvatar == "f") {
+  talkVideo.height = 544;
+}
+
 function setVideoElement(stream) {
   talkVideo.src = stream;
   talkVideo.loop = false;
@@ -59,7 +66,7 @@ function setVideoElement(stream) {
 }
 
 function playIdleVideo() {
-  talkVideo.src = './speech/avatar_idle_c.mp4';
+  talkVideo.src = './speech/' + myAvatar + "_idle.mp4";
   talkVideo.loop = true;
 }
 
@@ -273,7 +280,7 @@ async function replyProcessing(recognizedLang, userText) {
     nativeReply.innerHTML = `${nativeText} <span style='color: springgreen;'>${userText}</span>`.replace(/[123]/g, m => tags[m]);
     englishReply.innerHTML = `${displayText} <span style='color: seagreen;'>${userText}</span>`.replace(/[123]/g, m => tags[m]);
     if (video_codes.includes(targetCode)) {
-      const stream = "./speech/" + targetCode + "_g.mp4";
+      const stream = "./speech/" + targetCode + "_g_" + myAvatar + ".mp4";
       setVideoElement(stream);
       talkVideo.onended = playIdleVideo;
     }
@@ -305,7 +312,7 @@ async function replyProcessing(recognizedLang, userText) {
     nativeReply.innerHTML = finalText.replace(/[423]/g, m => tags[m]);
     englishReply.innerHTML = successText.replace(/[423]/g, m => tags[m]);
     if (video_codes.includes(targetCode)) {
-      const stream = "./speech/" + targetCode + "_s.mp4";
+      const stream = "./speech/" + targetCode + "_s_" + myAvatar + ".mp4";
       setVideoElement(stream);
       talkVideo.onended = playIdleVideo;
     }

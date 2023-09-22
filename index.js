@@ -1,9 +1,46 @@
 console.warn = () => {};
+
+const myProgress = new ProgressBar.Circle('#progress', {
+  color: "palegreen", 
+  strokeWidth: 10.0,
+  trailColor: 'transparent',
+  text: {
+    style: {
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        padding: 0,
+        margin: 0,
+        fontSize: '30px',
+        fontWeight: 'bold',
+        transform: {
+            prefix: true,
+            value: 'translate(-50%, -50%)'
+        }
+    }
+  },
+});
+
+myProgress.setText("10%");
+myProgress.animate(0.1);
+
 import { LangCode } from "./lcodes/LangCode.js";
-import {francAll} from 'https://esm.sh/franc@6?bundle'
+import {francAll} from 'https://esm.sh/franc@6?bundle';
 import {langDetector} from './eld/languageDetector.js'; 
+
+myProgress.setText("50%");
+myProgress.animate(0.5);
+
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
+
+myProgress.setText("70%");
+myProgress.animate(0.7);
+
 let classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
+
+myProgress.setText("90%");
+myProgress.animate(0.9);
+
 let classifier_mms = await pipeline('audio-classification', 'Xenova/mms-lid-126');
 
 const myAvatar = localStorage.getItem('myAvatar');
@@ -47,6 +84,9 @@ const tags = {
   4: "span style='color: blue;'"
 };
 
+myProgress.setText("100%");
+myProgress.animate(1.0);
+
 // hotfix for video height
 if (myAvatar == "f") {
   talkVideo.height = 544;
@@ -69,6 +109,9 @@ function playIdleVideo() {
   talkVideo.src = './speech/' + myAvatar + "_idle.mp4";
   talkVideo.loop = true;
 }
+
+myProgress.destroy();
+document.getElementById("progress").remove();
 
 playIdleVideo();
 
@@ -269,16 +312,20 @@ async function replyProcessing(recognizedLang, userText) {
   if (targetCode == null) {
     nativeReply.innerHTML = "<br/><br/>Sorry, I can't recognize the language.";
     englishReply.innerHTML = "<br/><br/>Sorry, I can't recognize the language.";
+    
+    goRetry();
 
   } else {
     if (userText != "") {
       displayText = `You seem to be speaking <3><1>${recognizedLang} <2><3>Is it correct?<3><3>Your text:`;
+      var [, userTextEnglish] = await googleTranslate(targetCode, "en", userText);
     } else {
       displayText = `You seem to be speaking <3><1>${recognizedLang} <2><3>Is it correct?`;
+      var userTextEnglish = "";
     }
     const [, nativeText] = await googleTranslate("en", targetCode, displayText);
     nativeReply.innerHTML = `${nativeText} <span style='color: springgreen;'>${userText}</span>`.replace(/[123]/g, m => tags[m]);
-    englishReply.innerHTML = `${displayText} <span style='color: seagreen;'>${userText}</span>`.replace(/[123]/g, m => tags[m]);
+    englishReply.innerHTML = `${displayText} <span style='color: seagreen;'>${userTextEnglish}</span>`.replace(/[123]/g, m => tags[m]);
     if (video_codes.includes(targetCode)) {
       const stream = "./speech/" + targetCode + "_g_" + myAvatar + ".mp4";
       setVideoElement(stream);
@@ -405,6 +452,7 @@ async function sendTranscribe3(blob) {
 }
 
 async function googleTranslate(sourceLang, targetLang, sourceText) {
+  try {  
     
     let google_url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(sourceText);
     
@@ -417,6 +465,9 @@ async function googleTranslate(sourceLang, targetLang, sourceText) {
       resArr.push(translateResult[0][i][0]);
     }
     return [translateResult[2], resArr.join("")];
+  } catch (error) {
+    return ["en", "Sorry, translation failed"]
+  }
 }
 
 /* ***********************************************************

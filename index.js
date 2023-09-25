@@ -36,26 +36,12 @@ import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.
 myProgress.animate(0.7);
 myProgress.setText("70%");
 
-let classifier;
-
-if (!localStorage.getItem("whisper")) {
-  classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
-  localStorage.setItem("whisper", classifier);
-} else {
-  classifier = localStorage.getItem("whisper");
-}
+let classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
 
 myProgress.animate(0.9);
 myProgress.setText("90%");
 
-let classifier_mms;
-
-if (!localStorage.getItem("mms")) {
-  classifier_mms = await pipeline('audio-classification', 'Xenova/mms-lid-126');
-  localStorage.setItem("mms", classifier_mms);
-} else {
-  classifier_mms = localStorage.getItem("mms");
-}
+let classifier_mms = await pipeline('audio-classification', 'Xenova/mms-lid-126');
 
 const myAvatar = localStorage.getItem('myAvatar');
 

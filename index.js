@@ -258,14 +258,12 @@ async function langDetectText(sourceText) {
           break;
       case 1:
           let selected_franc = francAll(sourceText, {minLength: 6}).slice(0,2);
-          console.log(selected_franc);
           recLang  = selected_franc.filter(element => !triedLang.includes(languageName.of(element[0])))[0][0];
           fullLang = languageName.of(recLang);
           triedLang.push(fullLang);
           break;
       case 2:
           let selected_eld = Object.entries(langDetector.detect(sourceText)['scores']);
-          console.log(selected_eld);
           recLang  = selected_eld.filter(element => !triedLang.includes(languageName.of(element[0])))[0][0];
           fullLang = languageName.of(recLang);
           break;           

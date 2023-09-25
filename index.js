@@ -21,27 +21,41 @@ const myProgress = new ProgressBar.Circle('#progress', {
   },
 });
 
-myProgress.setText("10%");
 myProgress.animate(0.1);
+myProgress.setText("10%");
 
 import { LangCode } from "./lcodes/LangCode.js";
 import {francAll} from 'https://esm.sh/franc@6?bundle';
 import {langDetector} from './eld/languageDetector.js'; 
 
-myProgress.setText("50%");
 myProgress.animate(0.5);
+myProgress.setText("50%");
 
 import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.0';
 
-myProgress.setText("70%");
 myProgress.animate(0.7);
+myProgress.setText("70%");
 
-let classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
+let classifier;
 
-myProgress.setText("90%");
+if (!localStorage.getItem("whisper")) {
+  classifier = await pipeline('automatic-speech-recognition', 'Xenova/whisper-base');
+  localStorage.setItem("whisper", classifier);
+} else {
+  classifier = localStorage.getItem("whisper");
+}
+
 myProgress.animate(0.9);
+myProgress.setText("90%");
 
-let classifier_mms = await pipeline('audio-classification', 'Xenova/mms-lid-126');
+let classifier_mms;
+
+if (!localStorage.getItem("mms")) {
+  classifier_mms = await pipeline('audio-classification', 'Xenova/mms-lid-126');
+  localStorage.setItem("mms", classifier_mms);
+} else {
+  classifier_mms = localStorage.getItem("mms");
+}
 
 const myAvatar = localStorage.getItem('myAvatar');
 
@@ -84,8 +98,8 @@ const tags = {
   4: "span style='color: blue;'"
 };
 
-myProgress.setText("100%");
 myProgress.animate(1.0);
+myProgress.setText("100%");
 
 // hotfix for video height
 if (myAvatar == "f") {

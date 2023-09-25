@@ -13,7 +13,8 @@ class LangCode {
   }
   static async encode(s) {
     const csv = await LangCode.init();
-    const value = csv.find(line => line[1].indexOf(s) >= 0);
+    // const value = csv.find(line => line[1].indexOf(s) >= 0);
+	const value = csv.find(line => line[1].split("; ").includes(s));
     if (!value) {
       return null;
     }

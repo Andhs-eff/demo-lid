@@ -34,7 +34,7 @@ de,German
 dv,Divehi; Dhivehi; Maldivian
 dz,Dzongkha; Bhutani; Butanese
 ee,Ewe
-el,Modern Greek (post 1453)
+el,Greek
 en,English
 eo,Esperanto
 es,Spanish; Castilian
@@ -48,7 +48,7 @@ fo,Faroese; Faeroese
 fr,French
 fy,Western Frisian
 ga,Irish
-gd,Gaelic; Scottish Gaelic; Gaelic (Scots)
+gd,Gaelic; Scottish Gaelic
 gl,Galician
 gn,Guarani
 gu,Gujarati
@@ -110,17 +110,17 @@ ms,Malay
 mt,Maltese
 my,Myanmar; Burmese
 na,Nauran
-nb,Bokmål, Norwegian; Norwegian Bokmål
-nd,Ndebele, North; North Ndebele
+nb,Bokmål; Norwegian Bokmål
+nd,Ndebele; North Ndebele
 ne,Nepali
 ng,Ndonga
 nl,Dutch
-nn,Norwegian Nynorsk; Nynorsk, Norwegian
+nn,Norwegian Nynorsk; Nynorsk
 no,Norwegian
-nr,Ndebele, South; South Ndebele
+nr,Ndebele; South Ndebele
 nv,Navajo; Navaho
 ny,Chichewa; Chewa; Nyanja
-oc,Occitan (post 1500)
+oc,Occitan
 oj,Ojibwa
 om,Oromo; Afan Oromo; Galla
 or,Oriya
@@ -162,7 +162,7 @@ ti,Tigrinya
 tk,Turkmen
 tl,Tagalog
 tn,Setswana; Tswana
-to,Tongan (Tonga Islands)
+to,Tongan
 tr,Turkish
 ts,Tsonga
 tt,Tatar

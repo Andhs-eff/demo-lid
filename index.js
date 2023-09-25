@@ -258,12 +258,14 @@ async function langDetectText(sourceText) {
           break;
       case 1:
           let selected_franc = francAll(sourceText, {minLength: 6}).slice(0,2);
+          console.log(selected_franc);
           recLang  = selected_franc.filter(element => !triedLang.includes(languageName.of(element[0])))[0][0];
           fullLang = languageName.of(recLang);
           triedLang.push(fullLang);
           break;
       case 2:
           let selected_eld = Object.entries(langDetector.detect(sourceText)['scores']);
+          console.log(selected_eld);
           recLang  = selected_eld.filter(element => !triedLang.includes(languageName.of(element[0])))[0][0];
           fullLang = languageName.of(recLang);
           break;           
@@ -452,7 +454,7 @@ async function sendTranscribe3(blob) {
 }
 
 async function googleTranslate(sourceLang, targetLang, sourceText) {
-  try {  
+  try {
     
     let google_url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodeURI(sourceText);
     
@@ -493,14 +495,14 @@ function newPage() {
   document.getElementById("intext").style.display = "none";
   document.getElementById("whisper").style.display = "none";
   VKI_close();
-  document.getElementsByClassName("keyboardInputInitiator")[0].remove();
+  document.getElementsByClassName("keyboardInputInitiator")[0].style.display = "none";
 
   progressDisplay();
 }
 
 function goRetry() {
-  document.getElementById("ok-button").style.display = "none";
-  document.getElementById("no-button").style.display = "none";
+  document.getElementById("ok-button").remove();
+  document.getElementById("no-button").remove();
 
   const retry = document.createElement('button');
   retry.id = "retry-button";
@@ -517,6 +519,15 @@ function goRetry() {
   const retryButton = document.getElementById('retry-button');
 
   retryButton.onclick = () => {
-    window.location.reload();
+    // window.location.reload();
+    iter = 0;
+    document.getElementById('retry-button').remove();
+    document.getElementById("inter").style.display = "flex";
+    document.getElementById("whisper").style.display = "block";
+    document.getElementById("intext").style.display = "block";
+    document.getElementById("intext").value = "";
+    document.getElementsByClassName("keyboardInputInitiator")[0].style.display = "block";
+    nativeReply.innerHTML = "";
+    englishReply.innerHTML = "";
   }
 }
